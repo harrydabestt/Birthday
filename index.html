@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy 18th Sadiya ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Page Setup */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #080612;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Fixed Visual Stacking Order + Layer Isolation Fix */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            object-fit: cover;
+            display: block;
+            /* Prevents backdrop-filter from freezing or hiding the video stream */
+            will-change: transform;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 6, 22, 0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        #particle-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        #main-site-content {
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Password Gate Screen */
+        #password-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #080612;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+        
+        .password-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+        .password-box h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.3rem;
+            color: #ff758c;
+            margin-bottom: 15px;
+        }
+        .password-box p {
+            font-size: 1rem;
+            color: #e5e5e5;
+            margin-bottom: 20px;
+        }
+        .password-box input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+            transition: border 0.3s;
+        }
+        .password-box input:focus { border-color: #ff7eb3; }
+        .password-box button {
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            border: none; padding: 12px 45px; color: white;
+            font-weight: 600; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,117,140,0.3);
+            width: 100%;
+        }
+
+        /* Navigation Menu Bar */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 95%;
+        }
+        nav button {
+            background: none; border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem; font-weight: 500; cursor: pointer;
+            padding: 8px 14px; border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        nav button.active, nav button:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 12px rgba(255, 117, 140, 0.25);
+        }
+
+        /* App Sections Base Layout */
+        .section {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, backdrop-filter 0.5s ease;
+            z-index: 11;
+            padding: 90px 20px 30px 20px;
+            overflow-y: auto;
+        }
+        .section.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Selective Blur For Specific Tabs */
+        #gallery-section.active, #gift-page.active {
+            background: rgba(8, 6, 18, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Glassmorphic Home Card */
+        .wrapper {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+            margin: auto;
+        }
+
+        .disc-player {
+            width: 80px; height: 80px;
+            border-radius: 50%; border: 2px dashed #ff758c;
+            margin: 0 auto 20px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.4s ease;
+            background: rgba(255,117,140, 0.05);
+        }
+        .disc-player.playing {
+            transform: rotate(360deg);
+            border-style: solid;
+            animation: spin 5s linear infinite;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 0.8rem; letter-spacing: 3px;
+            text-transform: uppercase; color: #ff758c;
+            margin-bottom: 20px; font-weight: 600;
+        }
+        .message-box {
+            min-height: 140px; font-size: 1rem;
+            line-height: 1.7; color: #e5e5e5;
+            margin-bottom: 20px; text-align: left;
+        }
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; color: #ff7eb3;
+            opacity: 0; transition: opacity 1.2s ease;
+            text-align: right;
+        }
+
+        /* Gallery Grid Layout */
+        #gallery-section {
+            display: block;
+            padding-top: 90px;
+        }
+        .gallery-container-inner {
+            width: 100%; max-width: 1100px;
+            margin: 0 auto; text-align: center;
+        }
+        .gallery-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem; color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            padding-bottom: 40px;
+        }
+        .photo-card {
+            position: relative; height: 260px;
+            border-radius: 16px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+        }
+        .photo-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        .gift-box-trigger {
+            font-size: 80px; cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: transform 0.3s;
+        }
+
+        /* Surprise Modal Layout Frame */
+        .gift-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(7, 4, 15, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+        .gift-modal.open { opacity: 1; pointer-events: auto; }
+        .modal-body { text-align: center; position: relative; width: 100%; max-width: 420px; }
+
+        .hug-stage { position: relative; width: 100%; height: 160px; margin: 20px 0; overflow: hidden; }
+        .avatar { width: 70px; height: 70px; border-radius: 50%; position: absolute; bottom: 20px; transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .cat-avatar { background: #ffffff; left: -100px; box-shadow: inset -4px -4px 0px #e0e0e0; }
+        .cat-avatar::before, .cat-avatar::after { content: ''; position: absolute; top: -7px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 14px solid #ffffff; }
+        .cat-avatar::before { left: 5px; transform: rotate(-15deg); }
+        .cat-avatar::after { right: 5px; transform: rotate(15deg); }
+        .bear-avatar { background: #9c6644; right: -100px; box-shadow: inset -4px -4px 0px #7f4f24; }
+        .bear-avatar::before, .bear-avatar::after { content: ''; position: absolute; top: -5px; width: 20px; height: 20px; background: #9c6644; border-radius: 50%; }
+        .bear-avatar::before { left: 1px; }
+        .bear-avatar::after { right: 1px; }
+        .face { position: relative; width: 100%; height: 100%; }
+        .eyes { display: flex; justify-content: space-between; width: 34px; position: absolute; top: 32px; left: 18px; }
+        .eyes span { width: 7px; height: 7px; background: #222; border-radius: 50%; }
+        .arm { position: absolute; top: 40px; width: 26px; height: 12px; border-radius: 10px; transition: all 0.5s ease 1.4s; }
+        .cat-avatar .arm { background: #ffffff; left: 50px; transform-origin: left center; }
+        .bear-avatar .arm { background: #9c6644; right: 50px; transform-origin: right center; }
+
+        .gift-modal.open .cat-avatar { left: calc(50% - 62px); }
+        .gift-modal.open .bear-avatar { right: calc(50% - 62px); }
+        .gift-modal.open .cat-avatar .arm { transform: rotate(-35deg) scaleX(1.5); z-index: 5; }
+        .gift-modal.open .bear-avatar .arm { transform: rotate(35deg) scaleX(1.5); z-index: 4; }
+        .gift-modal.open .eyes span { height: 3px; border-radius: 0; border-top: 3px solid #222; background: transparent; }
+
+        .modal-heart { position: absolute; color: #ff477e; font-size: 1.4rem; opacity: 0; bottom: 70px; left: 50%; transform: translateX(-50%); }
+        .gift-modal.open .modal-heart { animation: burstUp 2.5s ease-out infinite 1.2s; }
+        .close-btn { background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; padding: 12px 35px; border-radius: 50px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 20px; }
+
+        /* Keyframes Animations */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-12px); } 60% { transform: translateY(-6px); } }
+        @keyframes floatHeart { 0% { transform: translateY(105vh) scale(0); opacity: 0; } 10% { opacity: 0.5; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) scale(1.1); opacity: 0; } }
+        @keyframes burstUp { 0% { transform: translate(-50%, 0) scale(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--x-dest), -110px) scale(1.4); opacity: 0; } }
+        .heart { position: fixed; color: rgba(255, 117, 140, 0.35); animation: floatHeart linear infinite; bottom: -50px; z-index: 3; }
+
+        /* Mobile Responsive Scale Viewports */
+        @media screen and (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .gallery-title { font-size: 2rem; }
+            .wrapper { padding: 25px 18px; border-radius: 20px; }
+            .message-box { font-size: 0.95rem; line-height: 1.6; }
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 0 4px 40px 4px;
+            }
+            .photo-card { height: 160px; border-radius: 12px; }
+            nav button { font-size: 0.78rem; padding: 6px 10px; }
+            .password-box { padding: 30px 20px; }
+            .password-box h2 { font-size: 1.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Asset Core Links -->
+    <audio id="bg-music" loop><source src="song.mp3" type="audio/mpeg"></audio>
+    <video id="video-background" loop muted playsinline><source src="background.mp4" type="video/mp4"></video>
+    <div class="video-overlay"></div>
+    <div id="particle-container"></div>
+
+    <!-- Security Input Gate Screen Layer -->
+    <div id="password-screen">
+        <div class="password-box">
+            <h2>Unlock Sadiya's Space 🔐</h2>
+            <p>My nickname is?</p>
+            <input type="text" id="password-input" placeholder="Type answer here..." onkeydown="if(event.key==='Enter') verifyUnlock()">
+            <button onclick="verifyUnlock()">Unlock</button>
+        </div>
+    </div>
+
+    <!-- Main Active Space Core Interface Map -->
+    <div id="main-site-content">
+        <nav>
+            <button id="btn-home" class="active" onclick="showPage('home-page')">Home</button>
+            <button id="btn-gallery" onclick="showPage('gallery-section')">Gallery</button>
+            <button id="btn-gift" onclick="showPage('gift-page')">Surprise</button>
+        </nav>
+
+        <!-- Main Home Card Section View -->
+        <div id="home-page" class="section active">
+            <div class="wrapper">
+                <div class="disc-player" id="disc" onclick="manageExperience()">
+                    <span id="play-icon" style="font-size: 1.6rem;">🎵</span>
+                </div>
+                <h1 id="heading">Sadiya</h1>
+                <div class="subtitle">Happy 18th Birthday</div>
+                <div class="message-box" id="msg-box">
+                    Click the music icon above to read your letter...
+                </div>
+                <div class="signature" id="sig">— Always yours, Haris</div>
+            </div>
+        </div>
+
+        <!-- Custom Image Grid Tab Layout Section -->
+        <div id="gallery-section" class="section">
+            <div class="gallery-container-inner">
+                <h2 class="gallery-title">12 Beautiful Memories</h2>
+                <div class="photo-grid">
+                    <div class="photo-card"><img src="pic1.jpg" alt="Memory 1"></div>
+                    <div class="photo-card"><img src="pic2.jpg" alt="Memory 2"></div>
+                    <div class="photo-card"><img src="pic3.jpg" alt="Memory 3"></div>
+                    <div class="photo-card"><img src="pic4.jpg" alt="Memory 4"></div>
+                    <div class="photo-card"><img src="pic5.jpg" alt="Memory 5"></div>
+                    <div class="photo-card"><img src="pic6.jpg" alt="Memory 6"></div>
+                    <div class="photo-card"><img src="pic7.jpg" alt="Memory 7"></div>
+                    <div class="photo-card"><img src="pic8.jpg" alt="Memory 8"></div>
+                    <div class="photo-card"><img src="pic9.jpg" alt="Memory 9"></div>
+                    <div class="photo-card"><img src="pic10.jpg" alt="Memory 10"></div>
+                    <div class="photo-card"><img src="pic11.jpg" alt="Memory 11"></div>
+                    <div class="photo-card"><img src="pic12.jpg" alt="Memory 12"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gift Surprise Selection Tab -->
+        <div id="gift-page" class="section">
+            <div style="text-align: center;">
+                <div class="gift-box-trigger" onclick="revealHuggingSurprise()">🎁</div>
+                <p style="margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; color:#ff758c; font-weight:600;">Click to open your gift</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Canvas Hug Box Structural Element -->
+    <div class="gift-modal" id="hugModal">
+        <div class="modal-body">
+            <h2 style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color:#ff7eb3;">Together Always 🤍</h2>
+            <div class="hug-stage">
+                <div class="modal-heart" style="--x-dest: -50px; animation-delay: 1.2s;">❤️</div>
+                <div class="modal-heart" style="--x-dest: 35px; animation-delay: 1.5s;">💖</div>
+                <div class="modal-heart" style="--x-dest: -15px; animation-delay: 1.8s;">💝</div>
+                <div class="modal-heart" style="--x-dest: 60px; animation-delay: 2.1s;">❤️</div>
+
+                <div class="avatar cat-avatar">
+                    <div class="face">
+                        <div class="eyes"><span></span><span></span></div>
+                        <div class="arm"></div>
+                    </div>
+                </div>
+                <div class="avatar bear-avatar">
+                    <div class="face">
+                        <div class="eyes"><span></span><span></span></div>
+                        <div class="arm"></div>
+                    </div>
+                </div>
+            </div>
+            <p style="color: rgba(255,255,255,0.85); font-size: 0.9rem; padding: 0 10px; line-height:1.6;">Sending you the biggest, warmest hug in the universe on your 18th birthday!</p>
+            <button class="close-btn" onclick="dismissHuggingSurprise()">Close Box</button>
+        </div>
+    </div>
+
+    <script>
+        const messageString = "ap ko janam din mubarak madam...\n\npehle shukriya iss garib ki zindagi mai aanei k liye. Tou aj ap 18 ki ho gayi hai ( pata hai mujh se badi hai ) kya kare aa gayi ho pasand ab kya hi karei.\n\nTou ap k iss special din pe meri taraf se Happiest birthday and wish you get everything you get, May allah bless you, May you always be happy , may you always get what you want.";
+        let stateStarted = false;
+
+        function verifyUnlock() {
+            const userInput = document.getElementById('password-input').value.trim().toLowerCase();
+            if (userInput === 'eva') {
+                const gate = document.getElementById('password-screen');
+                gate.style.opacity = '0';
+                setTimeout(() => gate.style.display = 'none', 500);
+
+                const site = document.getElementById('main-site-content');
+                site.style.opacity = '1';
+                site.style.pointerEvents = 'auto';
+
+                // Robust Video Playback Pipeline Trigger
+                try {
+                    const video = document.getElementById('video-background');
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.load(); // Resets video state container directly before execution
+                    
+                    let playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(err => {
+                            // Failsafe backup loop engine retry execution
+                            setTimeout(() => { video.play(); }, 150);
+                        });
+                    }
+                } catch (videoErr) {
+                    console.log("Video setup warning:", videoErr);
+                }
+
+                // Audio music initialization tracks start
+                try {
+                    document.getElementById('bg-music').play().catch(e => {});
+                } catch (audioErr) {}
+                
+                document.getElementById('disc').classList.add('playing');
+                runTypewriter();
+                buildFloatingHearts();
+                stateStarted = true;
+            } else {
+                alert("Incorrect nickname! Try again, Sadiya ❤️");
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            if(pageId === 'home-page') document.getElementById('btn-home').classList.add('active');
+            if(pageId === 'gallery-section') document.getElementById('btn-gallery').classList.add('active');
+            if(pageId === 'gift-page') document.getElementById('btn-gift').classList.add('active');
+        }
+
+        function buildFloatingHearts() {
+            const space = document.getElementById('particle-container');
+            const targetLimit = window.innerWidth < 600 ? 12 : 25;
+            for(let i=0; i<targetLimit; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.classList.add('heart');
+                    h.innerHTML = '❤️';
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                    h.style.fontSize = (Math.random() * 10 + 12) + 'px';
+                    space.appendChild(h);
+                    setTimeout(() => { h.remove(); }, 8000);
+                }, i * 350);
+            }
+        }
+
+        function manageExperience() {
+            const track = document.getElementById('bg-music');
+            const disc = document.getElementById('disc');
+            const icon = document.getElementById('play-icon');
+
+            if (track.paused) {
+                track.play().catch(e => {});
+                disc.classList.add('playing');
+                icon.innerHTML = '🎵';
+            } else {
+                track.pause();
+                disc.classList.remove('playing');
+                icon.innerHTML = '⏸️';
+            }
+        }
+
+        function runTypewriter() {
+            const field = document.getElementById('msg-box');
+            field.innerHTML = '';
+            let cursor = 0;
+
+            function write() {
+                if (cursor < messageString.length) {
+                    let character = messageString.charAt(cursor);
+                    field.innerHTML += (character === '\n') ? '<br>' : character;
+                    cursor++;
+                    setTimeout(write, window.innerWidth < 600 ? 30 : 45);
+                } else {
+                    document.getElementById('sig').style.opacity = '1';
+                }
+            }
+            write();
+        }
+
+        function revealHuggingSurprise() { document.getElementById('hugModal').classList.add('open'); }
+        function dismissHuggingSurprise() { document.getElementById('hugModal').classList.remove('open'); }
+    </script>
+</body>
+</html>
