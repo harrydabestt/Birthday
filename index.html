@@ -239,7 +239,7 @@
         }
         .gallery-container-inner {
             width: 100%;
-            max-width: 520px;
+            max-width: 540px;
             margin: 0 auto;
             text-align: center;
         }
@@ -252,12 +252,12 @@
         .slideshow-viewport {
             position: relative;
             width: 100%;
-            height: 380px;
+            height: 460px; /* Increased frame height for desktop compatibility */
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 20px 45px rgba(0,0,0,0.55);
             border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.02);
+            background: rgba(0, 0, 0, 0.25); /* Added dark backing layout for uncropped alignment */
         }
         .slideshow-track {
             display: flex;
@@ -276,7 +276,7 @@
         .slide-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Changed to 'contain' to completely fix cutting/cropping issues */
         }
         .nav-arrow {
             position: absolute;
@@ -440,7 +440,7 @@
             .gallery-title { font-size: 2rem; }
             .wrapper { padding: 25px 18px; border-radius: 20px; }
             .message-box { font-size: 0.95rem; line-height: 1.6; }
-            .slideshow-viewport { height: 290px; border-radius: 18px; }
+            .slideshow-viewport { height: 380px; border-radius: 18px; } /* Increased frame height for mobile devices */
             .nav-arrow { width: 38px; height: 38px; font-size: 0.95rem; }
             nav button { font-size: 0.78rem; padding: 6px 10px; }
             .password-box { padding: 30px 20px; }
@@ -453,11 +453,13 @@
 </head>
 <body>
 
+    <!-- Asset Core Links -->
     <audio id="bg-music" loop><source src="song.mp3" type="audio/mpeg"></audio>
     <video id="video-background" loop muted playsinline><source src="background.mp4" type="video/mp4"></video>
     <div class="video-overlay"></div>
     <div id="particle-container"></div>
 
+    <!-- Security Input Gate Screen Layer -->
     <div id="password-screen">
         <div class="password-box">
             <h2>Unlock Sadiya's Space 🔐</h2>
@@ -467,6 +469,7 @@
         </div>
     </div>
 
+    <!-- Main Active Space Core Interface Map -->
     <div id="main-site-content">
         <nav>
             <button id="btn-home" class="active" onclick="showPage('home-page')">Home</button>
@@ -474,6 +477,7 @@
             <button id="btn-gift" onclick="showPage('gift-page')">Surprise</button>
         </nav>
 
+        <!-- Main Home Card Section View -->
         <div id="home-page" class="section active">
             <div class="wrapper">
                 <div class="disc-player" id="disc" onclick="manageExperience()">
@@ -488,9 +492,10 @@
             </div>
         </div>
 
+        <!-- Custom Photo Slideshow Carousel Replacing Old Grid Section -->
         <div id="gallery-section" class="section">
             <div class="gallery-container-inner">
-                <h2 class="gallery-title"> Some Beautiful Faces</h2>
+                <h2 class="gallery-title">12 Beautiful Memories</h2>
                 
                 <div class="slideshow-viewport">
                     <button class="nav-arrow prev-arrow" onclick="shiftSlide(-1)">❮</button>
@@ -507,6 +512,8 @@
                         <div class="slide-item"><img src="pic8.jpg" alt="Memory 8"></div>
                         <div class="slide-item"><img src="pic9.jpg" alt="Memory 9"></div>
                         <div class="slide-item"><img src="pic10.jpg" alt="Memory 10"></div>
+                        <div class="slide-item"><img src="pic11.jpg" alt="Memory 11"></div>
+                        <div class="slide-item"><img src="pic12.jpg" alt="Memory 12"></div>
                     </div>
                 </div>
 
@@ -527,6 +534,7 @@
             </div>
         </div>
 
+        <!-- Gift Surprise Selection Tab -->
         <div id="gift-page" class="section">
             <div style="text-align: center;">
                 <div class="gift-box-trigger" onclick="revealHuggingSurprise()">🎁</div>
@@ -535,6 +543,7 @@
         </div>
     </div>
 
+    <!-- Interactive Canvas Hug Box Structural Element -->
     <div class="gift-modal" id="hugModal">
         <div class="modal-body">
             <h2 style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color:#ff7eb3;">Together Always 🤍</h2>
@@ -562,10 +571,14 @@
         </div>
     </div>
 
+    <!-- SEPARATE GRAND FINALE PARAGRAPH VIEW PAGE OVERLAY -->
     <div id="final-letter-page" style="opacity: 0; pointer-events: none; transition: opacity 0.6s ease; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 20000;">
         <div class="letter-scroll-wrapper">
             <h2>To Sadiya... ❤️</h2>
             
+            <!-- ========================================== -->
+            <!-- LONG PARAGRAPH MESSAGE CONTAINER           -->
+            <!-- ========================================== -->
             <p>
                 Meri pyari Sadiya,<br><br>
                 Main bas tumhe batana chahta hoon ki tum mere liye kitni special ho. Tum itni khoobsurat ho ki jab bhi main tumhe dekhta hoon, meri nazar tumse hat-ti hi nahi. Tumhari smile, tumhari aankhein, aur tumhara baat karne ka tareeqa—sab kuch perfect hai. Tumhare saath bitaya hua har ek second mera favorite ban jaata hai. Tumhare jaisa koi nahi hai.<br><br>
@@ -573,6 +586,8 @@
                 Meri zindagi mein aane ke liye aur mujhe itna khush rakhne ke liye thank you.<br><br>
                 I love you so much, Sadiya. Hamesha aur sabse zyada.
             </p>
+            <!-- ========================================== -->
+            
             <p style="text-align: right; font-family: 'Dancing Script', cursive; font-size: 2rem; color: #ff7eb3; margin-top: 30px;">— Always yours, Haris</p>
             <button class="letter-footer-btn" onclick="closeFinalLetterPage()">Back to Site</button>
         </div>
@@ -580,7 +595,7 @@
 
     <script>
         // ==========================================
-        // LINE 265: EDIT YOUR STARTING TYPEWRITER MESSAGE HERE !!
+        // STARTING TYPEWRITER MESSAGE TEXT ENGINE
         // ==========================================
         const messageString = "ap ko janam din mubarak madam...\n\npehle shukriya iss garib ki zindagi mai aanei k liye. Tou aj ap 18 ki ho gayi hai ( pata hai mujh se badi hai ) kya kare aa gayi ho pasand ab kya hi karei.\n\nTou ap k iss special din pe meri taraf se Happiest birthday and wish you get everything you get, May allah bless you, May you always be happy , may you always get what you want.";
         
