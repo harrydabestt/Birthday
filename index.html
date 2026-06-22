@@ -27,7 +27,6 @@
             z-index: 1;
             object-fit: cover;
             display: block;
-            /* Prevents backdrop-filter from freezing or hiding the video stream */
             will-change: transform;
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
@@ -232,35 +231,101 @@
             text-align: right;
         }
 
-        /* Gallery Grid Layout */
+        /* Slideshow Carousel System Styling */
         #gallery-section {
-            display: block;
-            padding-top: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .gallery-container-inner {
-            width: 100%; max-width: 1100px;
-            margin: 0 auto; text-align: center;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            text-align: center;
         }
         .gallery-title {
             font-family: 'Dancing Script', cursive;
             font-size: 2.5rem; color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 16px;
-            padding-bottom: 40px;
+        .slideshow-viewport {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
         }
-        .photo-card {
-            position: relative; height: 260px;
-            border-radius: 16px; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.3s ease;
+        .slideshow-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .photo-card img { width: 100%; height: 100%; object-fit: cover; }
+        .slide-item {
+            min-width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+            user-select: none;
+        }
+        .nav-arrow:hover {
+            background: rgba(255, 117, 140, 0.7);
+            border-color: #ff7eb3;
+            box-shadow: 0 0 15px rgba(255, 117, 140, 0.4);
+        }
+        .prev-arrow { left: 12px; }
+        .next-arrow { right: 12px; }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 15px;
+        }
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: #ff758c;
+            transform: scale(1.35);
+            box-shadow: 0 0 8px rgba(255, 117, 140, 0.7);
+        }
 
         .gift-box-trigger {
             font-size: 80px; cursor: pointer;
@@ -268,7 +333,7 @@
             transition: transform 0.3s;
         }
 
-        /* Surprise Modal Layout Frame */
+        /* Gift Modals Framework */
         .gift-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -283,6 +348,58 @@
         .gift-modal.open { opacity: 1; pointer-events: auto; }
         .modal-body { text-align: center; position: relative; width: 100%; max-width: 420px; }
 
+        /* Separate Final Long Message Page Styling */
+        #final-letter-page {
+            background: rgba(6, 4, 14, 0.96);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            overflow-y: auto;
+            display: block; 
+            padding: 60px 20px;
+        }
+        .letter-scroll-wrapper {
+            width: 100%;
+            max-width: 580px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 28px;
+            padding: 40px 30px;
+            margin: 40px auto;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+            text-align: left;
+        }
+        .letter-scroll-wrapper h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #ff7eb3;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .letter-scroll-wrapper p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #e2e2e8;
+            margin-bottom: 20px;
+            white-space: normal;
+        }
+        .letter-footer-btn {
+            display: block;
+            margin: 30px auto 10px auto;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 10px 30px;
+            border-radius: 50px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .letter-footer-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Hug Animation Elements */
         .hug-stage { position: relative; width: 100%; height: 160px; margin: 20px 0; overflow: hidden; }
         .avatar { width: 70px; height: 70px; border-radius: 50%; position: absolute; bottom: 20px; transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .cat-avatar { background: #ffffff; left: -100px; box-shadow: inset -4px -4px 0px #e0e0e0; }
@@ -308,7 +425,7 @@
 
         .modal-heart { position: absolute; color: #ff477e; font-size: 1.4rem; opacity: 0; bottom: 70px; left: 50%; transform: translateX(-50%); }
         .gift-modal.open .modal-heart { animation: burstUp 2.5s ease-out infinite 1.2s; }
-        .close-btn { background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; padding: 12px 35px; border-radius: 50px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .close-btn { background: linear-gradient(45deg, #ff758c, #ff7eb3); border: none; padding: 13px 35px; border-radius: 50px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(255,117,140,0.3); }
 
         /* Keyframes Animations */
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -323,27 +440,24 @@
             .gallery-title { font-size: 2rem; }
             .wrapper { padding: 25px 18px; border-radius: 20px; }
             .message-box { font-size: 0.95rem; line-height: 1.6; }
-            .photo-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 0 4px 40px 4px;
-            }
-            .photo-card { height: 160px; border-radius: 12px; }
+            .slideshow-viewport { height: 290px; border-radius: 18px; }
+            .nav-arrow { width: 38px; height: 38px; font-size: 0.95rem; }
             nav button { font-size: 0.78rem; padding: 6px 10px; }
             .password-box { padding: 30px 20px; }
             .password-box h2 { font-size: 1.9rem; }
+            .letter-scroll-wrapper { padding: 30px 20px; margin: 20px auto; }
+            .letter-scroll-wrapper h2 { font-size: 2.3rem; }
+            .letter-scroll-wrapper p { font-size: 0.98rem; line-height: 1.7; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Asset Core Links -->
     <audio id="bg-music" loop><source src="song.mp3" type="audio/mpeg"></audio>
     <video id="video-background" loop muted playsinline><source src="background.mp4" type="video/mp4"></video>
     <div class="video-overlay"></div>
     <div id="particle-container"></div>
 
-    <!-- Security Input Gate Screen Layer -->
     <div id="password-screen">
         <div class="password-box">
             <h2>Unlock Sadiya's Space 🔐</h2>
@@ -353,7 +467,6 @@
         </div>
     </div>
 
-    <!-- Main Active Space Core Interface Map -->
     <div id="main-site-content">
         <nav>
             <button id="btn-home" class="active" onclick="showPage('home-page')">Home</button>
@@ -361,7 +474,6 @@
             <button id="btn-gift" onclick="showPage('gift-page')">Surprise</button>
         </nav>
 
-        <!-- Main Home Card Section View -->
         <div id="home-page" class="section active">
             <div class="wrapper">
                 <div class="disc-player" id="disc" onclick="manageExperience()">
@@ -376,26 +488,47 @@
             </div>
         </div>
 
-        <!-- Custom Image Grid Tab Layout Section -->
         <div id="gallery-section" class="section">
             <div class="gallery-container-inner">
                 <h2 class="gallery-title">12 Beautiful Memories</h2>
-                <div class="photo-grid">
-                    <div class="photo-card"><img src="pic1.jpg" alt="Memory 1"></div>
-                    <div class="photo-card"><img src="pic2.jpg" alt="Memory 2"></div>
-                    <div class="photo-card"><img src="pic3.jpg" alt="Memory 3"></div>
-                    <div class="photo-card"><img src="pic4.jpg" alt="Memory 4"></div>
-                    <div class="photo-card"><img src="pic5.jpg" alt="Memory 5"></div>
-                    <div class="photo-card"><img src="pic6.jpg" alt="Memory 6"></div>
-                    <div class="photo-card"><img src="pic7.jpg" alt="Memory 7"></div>
-                    <div class="photo-card"><img src="pic8.jpg" alt="Memory 8"></div>
-                    <div class="photo-card"><img src="pic9.jpg" alt="Memory 9"></div>
-                    <div class="photo-card"><img src="pic10.jpg" alt="Memory 10"></div>
+                
+                <div class="slideshow-viewport">
+                    <button class="nav-arrow prev-arrow" onclick="shiftSlide(-1)">❮</button>
+                    <button class="nav-arrow next-arrow" onclick="shiftSlide(1)">❯</button>
+                    
+                    <div class="slideshow-track" id="sliderTrack">
+                        <div class="slide-item"><img src="pic1.jpg" alt="Memory 1"></div>
+                        <div class="slide-item"><img src="pic2.jpg" alt="Memory 2"></div>
+                        <div class="slide-item"><img src="pic3.jpg" alt="Memory 3"></div>
+                        <div class="slide-item"><img src="pic4.jpg" alt="Memory 4"></div>
+                        <div class="slide-item"><img src="pic5.jpg" alt="Memory 5"></div>
+                        <div class="slide-item"><img src="pic6.jpg" alt="Memory 6"></div>
+                        <div class="slide-item"><img src="pic7.jpg" alt="Memory 7"></div>
+                        <div class="slide-item"><img src="pic8.jpg" alt="Memory 8"></div>
+                        <div class="slide-item"><img src="pic9.jpg" alt="Memory 9"></div>
+                        <div class="slide-item"><img src="pic10.jpg" alt="Memory 10"></div>
+                        <div class="slide-item"><img src="pic11.jpg" alt="Memory 11"></div>
+                        <div class="slide-item"><img src="pic12.jpg" alt="Memory 12"></div>
+                    </div>
+                </div>
+
+                <div class="dots-container" id="dotsTrack">
+                    <div class="dot active" onclick="jumpToSlide(0)"></div>
+                    <div class="dot" onclick="jumpToSlide(1)"></div>
+                    <div class="dot" onclick="jumpToSlide(2)"></div>
+                    <div class="dot" onclick="jumpToSlide(3)"></div>
+                    <div class="dot" onclick="jumpToSlide(4)"></div>
+                    <div class="dot" onclick="jumpToSlide(5)"></div>
+                    <div class="dot" onclick="jumpToSlide(6)"></div>
+                    <div class="dot" onclick="jumpToSlide(7)"></div>
+                    <div class="dot" onclick="jumpToSlide(8)"></div>
+                    <div class="dot" onclick="jumpToSlide(9)"></div>
+                    <div class="dot" onclick="jumpToSlide(10)"></div>
+                    <div class="dot" onclick="jumpToSlide(11)"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Gift Surprise Selection Tab -->
         <div id="gift-page" class="section">
             <div style="text-align: center;">
                 <div class="gift-box-trigger" onclick="revealHuggingSurprise()">🎁</div>
@@ -404,7 +537,6 @@
         </div>
     </div>
 
-    <!-- Interactive Canvas Hug Box Structural Element -->
     <div class="gift-modal" id="hugModal">
         <div class="modal-body">
             <h2 style="font-family: 'Dancing Script', cursive; font-size: 2.6rem; color:#ff7eb3;">Together Always 🤍</h2>
@@ -428,13 +560,36 @@
                 </div>
             </div>
             <p style="color: rgba(255,255,255,0.85); font-size: 0.9rem; padding: 0 10px; line-height:1.6;">Sending you the biggest, warmest hug in the universe on your 18th birthday!</p>
-            <button class="close-btn" onclick="dismissHuggingSurprise()">Close Box</button>
+            <button class="close-btn" onclick="openFinalLetterPage()">Read My Special Message 💌</button>
+        </div>
+    </div>
+
+    <div id="final-letter-page" style="opacity: 0; pointer-events: none; transition: opacity 0.6s ease; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 20000;">
+        <div class="letter-scroll-wrapper">
+            <h2>To Sadiya... ❤️</h2>
+            
+            <p>
+                Meri pyari Sadiya,<br><br>
+                Main bas tumhe batana chahta hoon ki tum mere liye kitni special ho. Tum itni khoobsurat ho ki jab bhi main tumhe dekhta hoon, meri nazar tumse hat-ti hi nahi. Tumhari smile, tumhari aankhein, aur tumhara baat karne ka tareeqa—sab kuch perfect hai. Tumhare saath bitaya hua har ek second mera favorite ban jaata hai. Tumhare jaisa koi nahi hai.<br><br>
+                Tum sach mein meri poori duniya ho, mera sab kuch ho. Mere paas aise alfaz nahi hain jo ye bayaan kar sakein ki main tumse kitna pyar karta hoon. Sach toh ye hai ki main tumhare bina jeene ka soch bhi nahi sakta. Tum meri khushi ho, mera sukoon ho, aur meri har khwahish ho.<br><br>
+                Meri zindagi mein aane ke liye aur mujhe itna khush rakhne ke liye thank you.<br><br>
+                I love you so much, Sadiya. Hamesha aur sabse zyada.
+            </p>
+            <p style="text-align: right; font-family: 'Dancing Script', cursive; font-size: 2rem; color: #ff7eb3; margin-top: 30px;">— Always yours, Haris</p>
+            <button class="letter-footer-btn" onclick="closeFinalLetterPage()">Back to Site</button>
         </div>
     </div>
 
     <script>
-        const messageString = "Aj ek bohat hi khaas din hai kue k aj hi k din iss duniya mai ek pagal ladki aayi thi jis ne mujh jaise bechare ka dil chura liya.Ap ko Janam Din Mubarak Madam...\n\nPehle Shukriya iss Garib ki Zindagi Mai Aanei k Liye. Tou aj ap 18 ki ho gayi hai ( pata hai mujh se badi hai ) kya kare aa gayi ho pasand ab kya hi karei.\n\nTou ap k iss special din pe meri taraf se Happiest birthday and wish you get everything you get, May allah bless you, May you always be happy , May you always get what you want.";
+        // ==========================================
+        // LINE 265: EDIT YOUR STARTING TYPEWRITER MESSAGE HERE !!
+        // ==========================================
+        const messageString = "ap ko janam din mubarak madam...\n\npehle shukriya iss garib ki zindagi mai aanei k liye. Tou aj ap 18 ki ho gayi hai ( pata hai mujh se badi hai ) kya kare aa gayi ho pasand ab kya hi karei.\n\nTou ap k iss special din pe meri taraf se Happiest birthday and wish you get everything you get, May allah bless you, May you always be happy , may you always get what you want.";
+        
         let stateStarted = false;
+        let slideIndex = 0;
+        const maxSlides = 12;
+        let autoPlayInterval = null;
 
         function verifyUnlock() {
             const userInput = document.getElementById('password-input').value.trim().toLowerCase();
@@ -447,25 +602,20 @@
                 site.style.opacity = '1';
                 site.style.pointerEvents = 'auto';
 
-                // Robust Video Playback Pipeline Trigger
                 try {
                     const video = document.getElementById('video-background');
                     video.muted = true;
                     video.playsInline = true;
-                    video.load(); // Resets video state container directly before execution
+                    video.load();
                     
                     let playPromise = video.play();
                     if (playPromise !== undefined) {
                         playPromise.catch(err => {
-                            // Failsafe backup loop engine retry execution
                             setTimeout(() => { video.play(); }, 150);
                         });
                     }
-                } catch (videoErr) {
-                    console.log("Video setup warning:", videoErr);
-                }
+                } catch (videoErr) {}
 
-                // Audio music initialization tracks start
                 try {
                     document.getElementById('bg-music').play().catch(e => {});
                 } catch (audioErr) {}
@@ -473,6 +623,7 @@
                 document.getElementById('disc').classList.add('playing');
                 runTypewriter();
                 buildFloatingHearts();
+                triggerAutoPlay();
                 stateStarted = true;
             } else {
                 alert("Incorrect nickname! Try again, Sadiya ❤️");
@@ -487,6 +638,42 @@
             if(pageId === 'home-page') document.getElementById('btn-home').classList.add('active');
             if(pageId === 'gallery-section') document.getElementById('btn-gallery').classList.add('active');
             if(pageId === 'gift-page') document.getElementById('btn-gift').classList.add('active');
+        }
+
+        function triggerAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(() => {
+                shiftSlide(1, true);
+            }, 3500);
+        }
+
+        function shiftSlide(direction, isAutoTriggered = false) {
+            slideIndex += direction;
+            if (slideIndex >= maxSlides) slideIndex = 0;
+            if (slideIndex < 0) slideIndex = maxSlides - 1;
+            
+            renderSlideshowUpdate();
+            if (!isAutoTriggered) triggerAutoPlay();
+        }
+
+        function jumpToSlide(targetIndex) {
+            slideIndex = targetIndex;
+            renderSlideshowUpdate();
+            triggerAutoPlay();
+        }
+
+        function renderSlideshowUpdate() {
+            const track = document.getElementById('sliderTrack');
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if(index === slideIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
         }
 
         function buildFloatingHearts() {
@@ -542,6 +729,19 @@
 
         function revealHuggingSurprise() { document.getElementById('hugModal').classList.add('open'); }
         function dismissHuggingSurprise() { document.getElementById('hugModal').classList.remove('open'); }
+
+        function openFinalLetterPage() {
+            dismissHuggingSurprise();
+            const letterPage = document.getElementById('final-letter-page');
+            letterPage.style.opacity = '1';
+            letterPage.style.pointerEvents = 'auto';
+        }
+
+        function closeFinalLetterPage() {
+            const letterPage = document.getElementById('final-letter-page');
+            letterPage.style.opacity = '0';
+            letterPage.style.pointerEvents = 'none';
+        }
     </script>
 </body>
 </html>
